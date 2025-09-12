@@ -2,7 +2,7 @@ import sys
 import os
 from PIL import Image, ImageSequence
 
-def resize_gif(input_path, output_path, size=(162, 75), rotate=False):
+def resize_gif(input_path, output_path, size=(165, 72), rotate=False):
     with Image.open(input_path) as im:
         frames = []
         for frame in ImageSequence.Iterator(im):
