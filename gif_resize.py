@@ -5,20 +5,26 @@ from PIL import Image, ImageSequence
 def resize_gif(input_path, output_path, size=(165, 72), rotate=False):
     with Image.open(input_path) as im:
         frames = []
+        durations = []
+        disposals = []
         for frame in ImageSequence.Iterator(im):
             frame = frame.convert("RGBA")
             if rotate:
                 frame = frame.rotate(-90, expand=True)  # -90 = clockwise
             frame = frame.resize(size, Image.Resampling.LANCZOS)
             frames.append(frame)
+            durations.append(frame.info.get("duration", 100))
+            disposals.append(frame.info.get("disposal", 2))
+
 
         frames[0].save(
             output_path,
             save_all=True,
             append_images=frames[1:],
             loop=im.info.get("loop", 0),
-            duration=im.info.get("duration", 100),
-            disposal=2,
+            duration=durations,
+            disposal=disposals,
+            optimize=False,
         )
 
 if __name__ == "__main__":
